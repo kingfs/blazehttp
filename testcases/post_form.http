@@ -1,0 +1,6 @@
+# Request
+# tag: black,sqli
+#
+POST / HTTP/1.1
+
+name=1' or 1=1&submit=submit
