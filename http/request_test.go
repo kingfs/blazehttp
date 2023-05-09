@@ -49,7 +49,7 @@ func BenchmarkRequest(b *testing.B) {
 	req := new(Request)
 
 	for i := 0; i < b.N; i++ {
-		req.ReadFrom(buf)
+		_, _ = req.ReadFrom(buf)
 	}
 }
 func TestRequestRawParse(t *testing.T) {

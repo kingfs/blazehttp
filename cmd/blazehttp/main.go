@@ -63,9 +63,9 @@ retry:
 	wDeadline := time.Now().Add(time.Duration(timeout) * time.Millisecond)
 	rDeadline := time.Now().Add(time.Duration(timeout*2) * time.Millisecond)
 	deadline := time.Now().Add(time.Duration(timeout*2) * time.Millisecond)
-	n.SetDeadline(deadline)
-	n.SetReadDeadline(rDeadline)
-	n.SetWriteDeadline(wDeadline)
+	_ = n.SetDeadline(deadline)
+	_ = n.SetReadDeadline(rDeadline)
+	_ = n.SetWriteDeadline(wDeadline)
 
 	return &n
 }
@@ -142,7 +142,7 @@ func main() {
 
 	bar := progressbar.Default(int64(len(fileList)), "sending")
 	for _, f := range fileList {
-		bar.Add(1)
+		_ = bar.Add(1)
 		req := new(http.Request)
 		if err = req.ReadFile(f); err != nil {
 			fmt.Printf("read request file: %s error: %s\n", f, err)
