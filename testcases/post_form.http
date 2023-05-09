@@ -1,6 +1,4 @@
-# Request
-# tag: black,sqli
-#
+# tag: white
 POST / HTTP/1.1
 
-name=1' or 1=1&submit=submit
+name=haha&submit=submit

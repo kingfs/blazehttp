@@ -56,6 +56,9 @@ import (
 	action first_line_end {
 		r.RequestLine = data[start:p+1]
 	}
+	action only_requestline {
+		r.RequestLine = append(data[start:p], []byte("\r\n")...)
+	}
 	action found_http_body{
 		r.Body = data[mark:p+1]
 	}
@@ -93,13 +96,13 @@ import (
         SP+
         http_uri
         SP+ 
-        (any - CRLF)*
-        CRLF
+        (any - CRLF)* %eof only_requestline
+        CRLF 
     );
 
 	main := 
 		(EMPTY_LINE | COMMENT_LINE)*
-		request_line >first_line_start @first_line_end
+		request_line >first_line_start @first_line_end 
 		(HEADER_LINE @found_http_header)*
 		(CRLF HTTP_BODY)?
 	;

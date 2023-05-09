@@ -12,9 +12,10 @@ import (
 var _fsm_request_parser_actions []byte = []byte{
 	0, 1, 0, 1, 1, 1, 2, 1, 3, 
 	1, 4, 1, 5, 1, 6, 1, 7, 
-	1, 9, 1, 10, 2, 0, 2, 2, 
-	0, 10, 2, 3, 4, 2, 5, 6, 
-	2, 5, 7, 3, 8, 0, 1, 
+	1, 9, 1, 10, 1, 11, 2, 0, 
+	2, 2, 0, 11, 2, 3, 4, 2, 
+	5, 6, 2, 5, 7, 3, 8, 0, 
+	1, 
 }
 
 var _fsm_request_parser_key_offsets []byte = []byte{
@@ -61,13 +62,19 @@ var _fsm_request_parser_trans_targs []byte = []byte{
 }
 
 var _fsm_request_parser_trans_actions []byte = []byte{
-	0, 0, 0, 0, 0, 36, 36, 0, 
+	0, 0, 0, 0, 0, 38, 38, 0, 
 	0, 0, 0, 0, 0, 0, 0, 5, 
-	21, 1, 5, 5, 0, 0, 3, 3, 
+	23, 1, 5, 5, 0, 0, 3, 3, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	17, 0, 0, 0, 0, 9, 33, 11, 
-	30, 30, 15, 0, 13, 15, 0, 24, 
-	0, 0, 0, 0, 7, 27, 19, 
+	17, 0, 0, 0, 0, 9, 35, 11, 
+	32, 32, 15, 0, 13, 15, 0, 26, 
+	0, 0, 0, 0, 7, 29, 21, 
+}
+
+var _fsm_request_parser_eof_actions []byte = []byte{
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 19, 0, 0, 0, 0, 0, 0, 
+	0, 0, 
 }
 
 const fsm_request_parser_start int = 1
@@ -77,7 +84,7 @@ const fsm_request_parser_error int = 0
 const fsm_request_parser_en_main int = 1
 
 
-//line request_parser.rl:108
+//line request_parser.rl:111
 
 
 // parse implements the Request parse method.
@@ -93,12 +100,12 @@ func (r *Request) parse() (int, error) {
 	r.Metadata = make([]string, 0)
 		
 	
-//line request_parser.go:97
+//line request_parser.go:104
 	{
 	cs = fsm_request_parser_start
 	}
 
-//line request_parser.go:102
+//line request_parser.go:109
 	{
 	var _klen int
 	var _trans int
@@ -243,12 +250,12 @@ _match:
 
 		r.RequestLine = data[start:p+1]
 	
-		case 10:
-//line request_parser.rl:59
+		case 11:
+//line request_parser.rl:62
 
 		r.Body = data[mark:p+1]
 	
-//line request_parser.go:252
+//line request_parser.go:259
 		}
 	}
 
@@ -261,14 +268,30 @@ _again:
 		goto _resume
 	}
 	_test_eof: {}
+	if p == eof {
+		__acts := _fsm_request_parser_eof_actions[cs]
+		__nacts := uint(_fsm_request_parser_actions[__acts]); __acts++
+		for ; __nacts > 0; __nacts-- {
+			__acts++
+			switch _fsm_request_parser_actions[__acts-1] {
+			case 10:
+//line request_parser.rl:59
+
+		r.RequestLine = append(data[start:p], []byte("\r\n")...)
+	
+//line request_parser.go:283
+			}
+		}
+	}
+
 	_out: {}
 	}
 
-//line request_parser.rl:125
+//line request_parser.rl:128
 
 
 	if p != pe {
-		return p, fmt.Errorf("unexpected eof(p=%d, pe=%d): %s", p, pe,data)
+		return p, fmt.Errorf("unexpected eof(p=%d, pe=%d)", p, pe)
 	}
 
 	_ = eof

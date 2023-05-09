@@ -65,6 +65,9 @@ func (r *Request) CalculateContentLength() {
 			}
 		}
 	}
+	if !foundContentLength && bodyLength > 0 {
+		r.AddHeader("Content-Length", fmt.Sprintf("%d", bodyLength))
+	}
 }
 
 // GetHeaders get all key's value
