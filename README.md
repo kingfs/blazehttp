@@ -1,6 +1,10 @@
 # BlazeHTTP
 
-一个非标准http协议解析库
+一个非标准http协议解析库一个支持非标准HTTP请求/响应解析的库，附送一个发送大量非标准HTTP请求测试的工具。Enjoy yourself!
+
+(Named by GPT!)
+
+# 项目迁移至: https://github.com/chaitin/blazehttp
 
 ## 轮子?
 
