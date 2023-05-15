@@ -1,34 +1,56 @@
+project_name: blazehttp
+
+dist: .builds
+
 before:
   hooks:
     - go mod tidy
 
 builds:
-  - main: cmd/blazehttp/main.go
+  - id: build
+    main: ./cmd/blazehttp
     binary: blazehttp
-    id: blazehttp
-
+    # ldflags:
+    #   - -s -w -X github.com/pocketbase/pocketbase.Version={{ .Version }}
     env:
       - CGO_ENABLED=0
-
-    goos: [ windows,linux,darwin ]
-    goarch: [ amd64,386,arm,arm64 ]
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - 7
     ignore:
-      - goos: darwin
-        goarch: 386
       - goos: windows
         goarch: arm
-      - goos: windows
-        goarch: arm64
+      - goos: darwin
+        goarch: arm
 
-    flags:
-      - -trimpath
+release:
+  draft: true
 
 archives:
-  - format: zip
-    id: blazehttp
-    builds: [ blazehttp ]
-    replacements:
-      darwin: macOS
+  - id: archive
+    builds: [build]
+    format: zip
+    files:
+      - LICENSE*
+      - CHANGELOG*
 
 checksum:
-  algorithm: sha256
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: '{{ incpatch .Version }}-next'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^examples:'
+      - '^debug:'
+      - '^doc:'
